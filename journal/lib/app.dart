@@ -3,22 +3,37 @@ import 'package:journal/screens/journal_entry.dart';
 import 'package:journal/screens/journal_entry_list.dart';
 import 'package:journal/screens/new_journal_entry.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
 
   static final routes = {
-    JournalEntryList.routeName: (context) => JournalEntryList(),
+    //JournalEntryList.routeName: (context) => JournalEntryList(),
     JournalEntry.routeName: (context) => JournalEntry(),
     NewJournalEntry.routeName: (context) => NewJournalEntry(),
   };
 
   @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+
+  bool darkMode = false;
+
+  void toggleTheme (bool value) {
+    setState( () {
+      darkMode = value;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Journal',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routes: routes,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: darkMode ? ThemeMode.dark: ThemeMode.light,
+      routes: App.routes,
+      home: JournalEntryList(darkMode: darkMode, toggleTheme: toggleTheme),
     );
   }
 }
