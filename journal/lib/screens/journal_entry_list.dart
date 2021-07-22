@@ -8,7 +8,11 @@ class JournalEntryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Journal Entry List')),
+      endDrawer: Drawer(),
+      appBar: AppBar(
+        title: Text('Journal Entry List'),
+        actions: [openSettings()],
+      ),
       body: LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
@@ -20,6 +24,14 @@ class JournalEntryList extends StatelessWidget {
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
     constraints.maxWidth < 800 ? VerticalLayout() : HorizontalLayout();
 
+}
+
+Widget openSettings() {
+  return Builder(builder: (context) {
+    return IconButton(
+      icon: Icon(Icons.settings),
+      onPressed: () => Scaffold.of(context).openEndDrawer(),);
+  });
 }
 
 class VerticalLayout extends StatelessWidget {
