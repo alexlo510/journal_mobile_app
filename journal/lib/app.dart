@@ -6,9 +6,9 @@ import 'package:journal/screens/new_journal_entry.dart';
 class App extends StatelessWidget {
 
   static final routes = {
-    '/': (context) => JournalEntryList(),
-    'journalEntry': (context) => JournalEntry(),
-    'newJournalEntry': (context) => NewJournalEntry(),
+    JournalEntryList.routeName: (context) => JournalEntryList(),
+    JournalEntry.routeName: (context) => JournalEntry(),
+    NewJournalEntry.routeName: (context) => NewJournalEntry(),
   };
 
   @override
