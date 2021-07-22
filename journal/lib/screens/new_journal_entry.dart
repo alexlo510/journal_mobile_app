@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class NewJournalEntry extends StatelessWidget {
 
+  static const routeName = 'newJournalEntry';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
