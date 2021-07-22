@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:journal/screens/new_journal_entry.dart';
+import 'package:journal/components/journal_drawer.dart';
+import 'package:journal/components/journal_scaffold.dart';
 
 class JournalEntryList extends StatelessWidget {
 
-  static const routeName = '/';
+  final darkMode;
+  final toggleTheme;
+
+  JournalEntryList({
+    Key? key,
+    this.darkMode,
+    this.toggleTheme,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: Drawer(),
+      endDrawer: LayoutBuilder(builder: drawerDecider),
       appBar: AppBar(
         title: Text('Journal Entry List'),
         actions: [openSettings()],
@@ -22,16 +31,11 @@ class JournalEntryList extends StatelessWidget {
   }
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
-    constraints.maxWidth < 800 ? VerticalLayout() : HorizontalLayout();
+    constraints.maxWidth < 800 ? VerticalLayout(): HorizontalLayout();
 
-}
+  Widget drawerDecider(BuildContext context, BoxConstraints constraints) =>
+    constraints.maxWidth < 800 ? verticalDrawer(context, drawer(darkMode, toggleTheme)) : drawer(darkMode, toggleTheme);
 
-Widget openSettings() {
-  return Builder(builder: (context) {
-    return IconButton(
-      icon: Icon(Icons.settings),
-      onPressed: () => Scaffold.of(context).openEndDrawer(),);
-  });
 }
 
 class VerticalLayout extends StatelessWidget {
