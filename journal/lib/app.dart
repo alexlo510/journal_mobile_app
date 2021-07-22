@@ -5,12 +5,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Journal',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        appBar: AppBar(title: Text('')),
+        appBar: AppBar(title: Text('Journal')),
         body: LayoutBuilder(builder: layoutDecider),
       ),
     );
