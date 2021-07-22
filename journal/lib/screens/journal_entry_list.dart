@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:journal/screens/new_journal_entry.dart';
 
 class JournalEntryList extends StatelessWidget {
 
@@ -11,7 +12,7 @@ class JournalEntryList extends StatelessWidget {
       body: LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {pushNewJournalEntry(context);},
       ),
     );
   }
@@ -33,4 +34,8 @@ class HorizontalLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text('Horizontal');
   }
+}
+
+void pushNewJournalEntry(BuildContext context) {
+  Navigator.of(context).pushNamed(NewJournalEntry.routeName);
 }
