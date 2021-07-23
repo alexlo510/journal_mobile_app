@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:journal/screens/journal_entry.dart';
 import 'package:journal/screens/journal_entry_list.dart';
 import 'package:journal/screens/new_journal_entry.dart';
+
 
 class App extends StatefulWidget {
 
@@ -11,17 +13,26 @@ class App extends StatefulWidget {
     NewJournalEntry.routeName: (context) => NewJournalEntry(),
   };
 
+  final SharedPreferences preferences;
+
+  App({
+    Key? key,
+    required this.preferences,
+  }): super(key: key);
+
   @override
   AppState createState() => AppState();
 }
 
 class AppState extends State<App> {
 
-  bool darkMode = false;
+  static const DARK_MODE_KEY = 'darkMode';
+
+  bool get darkMode => widget.preferences.getBool(DARK_MODE_KEY) ?? false;
 
   void toggleTheme (bool value) {
     setState( () {
-      darkMode = value;
+      widget.preferences.setBool(DARK_MODE_KEY, value);
     });
   }
 
