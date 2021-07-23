@@ -17,7 +17,7 @@ class JournalEntryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: LayoutBuilder(builder: drawerDecider),
+      endDrawer: LayoutBuilder(builder: (context, constraints) => drawerDecider(context, constraints, darkMode, toggleTheme)),
       appBar: AppBar(
         title: Text('Journal Entry List'),
         actions: [openSettings()],
@@ -25,7 +25,7 @@ class JournalEntryList extends StatelessWidget {
       body: LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
-        onPressed: () {pushNewJournalEntry(context);},
+        onPressed: () {pushNewJournalEntry(context, ScreenArguments(darkMode, toggleTheme));},
       ),
     );
   }
@@ -33,8 +33,8 @@ class JournalEntryList extends StatelessWidget {
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
     constraints.maxWidth < 800 ? VerticalLayout(): HorizontalLayout();
 
-  Widget drawerDecider(BuildContext context, BoxConstraints constraints) =>
-    constraints.maxWidth < 800 ? verticalDrawer(context, drawer(darkMode, toggleTheme)) : drawer(darkMode, toggleTheme);
+  // Widget drawerDecider(BuildContext context, BoxConstraints constraints) =>
+  //   constraints.maxWidth < 800 ? verticalDrawer(context, drawer(darkMode, toggleTheme)) : drawer(darkMode, toggleTheme);
 
 }
 
@@ -52,6 +52,13 @@ class HorizontalLayout extends StatelessWidget {
   }
 }
 
-void pushNewJournalEntry(BuildContext context) {
-  Navigator.of(context).pushNamed(NewJournalEntry.routeName);
+void pushNewJournalEntry(BuildContext context, ScreenArguments args) {
+  Navigator.of(context).pushNamed(NewJournalEntry.routeName, arguments: args );
+}
+
+class ScreenArguments {
+  final bool darkMode;
+  final Function toggleTheme;
+
+  ScreenArguments(this.darkMode, this.toggleTheme);
 }
