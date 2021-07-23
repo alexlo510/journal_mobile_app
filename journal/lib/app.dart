@@ -12,10 +12,10 @@ class App extends StatefulWidget {
   };
 
   @override
-  _AppState createState() => _AppState();
+  AppState createState() => AppState();
 }
 
-class _AppState extends State<App> {
+class AppState extends State<App> {
 
   bool darkMode = false;
 
@@ -33,7 +33,6 @@ class _AppState extends State<App> {
       darkTheme: ThemeData.dark(),
       themeMode: darkMode ? ThemeMode.dark: ThemeMode.light,
       routes: App.routes,
-      //home: JournalEntryList(darkMode: darkMode, toggleTheme: toggleTheme),
     );
   }
 }
