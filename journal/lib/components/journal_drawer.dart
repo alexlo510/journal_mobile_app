@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:journal/app.dart';
 
-Widget drawerDecider(BuildContext context, BoxConstraints constraints, bool darkMode, Function toggleTheme) =>
-    constraints.maxWidth < 800 ? verticalDrawer(context, drawer(context, darkMode, toggleTheme)) : drawer(context, darkMode, toggleTheme);
+Widget drawerDecider(BuildContext context, BoxConstraints constraints) =>
+    constraints.maxWidth < 800 ? verticalDrawer(context, drawer(context)) : drawer(context);
 
 Widget verticalDrawer(BuildContext context, Widget drawer){
   return Container(
@@ -10,7 +11,7 @@ Widget verticalDrawer(BuildContext context, Widget drawer){
   );
 }
 
-Widget drawer(BuildContext context, bool darkMode, Function toggleTheme){
+Widget drawer(BuildContext context){
   return Drawer(
     child: ListView(
       children: [
@@ -20,22 +21,13 @@ Widget drawer(BuildContext context, bool darkMode, Function toggleTheme){
             child: Text('Settings')
           ),
         ),
-        darkModeToggle(darkMode: darkMode, toggleTheme: toggleTheme),
+        darkModeToggle(),
       ],
     ),
   );
 }
 
 class darkModeToggle extends StatefulWidget {
-
-  final darkMode;
-  final toggleTheme;
-
-  darkModeToggle({
-    Key? key,
-    this.darkMode,
-    this.toggleTheme,
-  }) : super(key: key);
 
   @override
   _darkModeState createState() => _darkModeState();
@@ -45,10 +37,13 @@ class _darkModeState extends State<darkModeToggle> {
   
   @override
   Widget build(BuildContext context) {
+
+    AppState? appState = context.findAncestorStateOfType<AppState>();
+
     return SwitchListTile(
       title: const Text('Dark Mode'),
-      value: widget.darkMode,
-      onChanged: widget.toggleTheme,
+      value: appState!.darkMode,
+      onChanged: appState.toggleTheme,
     );
   }
 }
