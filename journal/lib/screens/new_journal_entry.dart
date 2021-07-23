@@ -14,7 +14,7 @@ class NewJournalEntry extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text('New Journal Entry'),
         actions: [openSettings()],

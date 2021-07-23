@@ -97,7 +97,7 @@ Widget bodyFormField() {
 
 Widget cancelButton({required BuildContext context}) {
   return ElevatedButton(
-    onPressed: () => Navigator.pop(context), 
+    onPressed: () => Navigator.of(context).pop(), 
     child: Text('Cancel'),
     style: ElevatedButton.styleFrom(
       primary: Colors.grey,
