@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:journal/components/drop_down_rating_form_field.dart';
+import 'package:journal/models/journal_entry_fields.dart';
 
 class JournalEntryForm extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class JournalEntryForm extends StatefulWidget {
 class _JournalEntryFormState extends State<JournalEntryForm> {
 
   final formKey = GlobalKey<FormState>();
+  final journalEntryFields = JournalEntryFields();
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +20,13 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            titleFormField(),
-            bodyFormField(),
+            titleFormField(journalEntryFields: journalEntryFields),
+            bodyFormField(journalEntryFields: journalEntryFields),
             DropdownRatingFormField(
               maxRating: 4,
-              onSaved: (value) {},
+              onSaved: (value) {
+                journalEntryFields.rating = value;
+              },
               validator: (value) => (value == null) ? 'Please enter a Rating' : null, 
             ),
             Row(
@@ -32,6 +36,7 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
                 saveButton(
                   context: context,
                   formKey: formKey,
+                  journalEntryFields: journalEntryFields,
                 ),
               ],
             ),
@@ -42,7 +47,7 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
   }
 }
 
-Widget titleFormField() {
+Widget titleFormField({required JournalEntryFields journalEntryFields}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 10),
     child: TextFormField(
@@ -52,14 +57,14 @@ Widget titleFormField() {
           border: OutlineInputBorder(),
       ),
       onSaved: (value) {
-
+        journalEntryFields.title = value;
       },
       validator: (value) => (value!.isEmpty) ? 'Please enter a Title' :  null,
     ),
   );
 }
 
-Widget bodyFormField() {
+Widget bodyFormField({required JournalEntryFields journalEntryFields}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 10),
     child: TextFormField(
@@ -68,32 +73,12 @@ Widget bodyFormField() {
           border: OutlineInputBorder(),
       ),
       onSaved: (value) {
-
+        journalEntryFields.body = value;
       },
       validator: (value) => (value!.isEmpty) ? 'Please enter a Body' :  null,
     ),
   );
 }
-
-// Widget ratingFormField() {
-//   return TextFormField(
-//     //autofocus: true,
-//     decoration: InputDecoration(
-//         labelText: 'Rating',
-//         border: OutlineInputBorder(),
-//     ),
-//     onSaved: (value) {
-
-//     },
-//     validator: (value) {
-//       if (value!.isEmpty) {
-//         return 'Please enter a rating';
-//       } else {
-//         return null;
-//       }
-//     }
-//   );
-// }
 
 Widget cancelButton({required BuildContext context}) {
   return ElevatedButton(
@@ -106,11 +91,14 @@ Widget cancelButton({required BuildContext context}) {
   );
 }
 
-Widget saveButton({required BuildContext context, required dynamic formKey}) {
+Widget saveButton({required BuildContext context, required dynamic formKey, required JournalEntryFields journalEntryFields}) {
   return ElevatedButton(
     onPressed: () {
       if (formKey.currentState.validate()){
         formKey.currentState.save();
+        // do database work here
+        print(journalEntryFields.toString()); // remove this later
+        //
         Navigator.of(context).pop();
       }
     }, 
