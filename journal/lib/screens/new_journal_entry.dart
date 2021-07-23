@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:journal/components/journal_drawer.dart';
+import 'package:journal/components/journal_entry_form.dart';
 import 'package:journal/components/journal_scaffold.dart';
 
 class NewJournalEntry extends StatelessWidget {
@@ -19,7 +20,7 @@ class NewJournalEntry extends StatelessWidget {
         actions: [openSettings()],
       ),
       endDrawer: LayoutBuilder(builder: drawerDecider),
-      body: Text('New Journal Entry'),
+      body: JournalEntryForm(),
     );
   }
 }
