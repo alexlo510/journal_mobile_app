@@ -23,13 +23,7 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
             DropdownRatingFormField(
               maxRating: 4,
               onSaved: (value) {},
-              validator: (value) {
-                if (value!.isEmpty){
-                  return 'Please enter a Rating';
-                } else {
-                  return null;
-                }
-              },
+              validator: (value) { (value.isEmpty) ? 'Please enter a Rating' :  null; }
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -57,13 +51,7 @@ Widget titleFormField() {
       onSaved: (value) {
 
       },
-      validator: (value) {
-        if (value!.isEmpty) {
-          return 'Please enter a title';
-        } else {
-          return null;
-        }
-      }
+      validator: (value) { (value!.isEmpty) ? 'Please enter a Title' :  null; }
     ),
   );
 }
