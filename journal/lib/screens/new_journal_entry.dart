@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:journal/components/journal_drawer.dart';
 import 'package:journal/components/journal_scaffold.dart';
-import 'package:journal/screens/journal_entry_list.dart';
 
 class NewJournalEntry extends StatelessWidget {
 
@@ -9,8 +8,6 @@ class NewJournalEntry extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     
     return Scaffold(
       appBar: AppBar(
@@ -18,7 +15,7 @@ class NewJournalEntry extends StatelessWidget {
         title: Text('New Journal Entry'),
         actions: [openSettings()],
       ),
-      endDrawer: LayoutBuilder(builder: (context, constraints) => drawerDecider(context, constraints, args.darkMode, args.toggleTheme)),
+      endDrawer: LayoutBuilder(builder: (context, constraints) => drawerDecider(context, constraints)),
       body: Text('New Journal Entry'),
     );
   }
