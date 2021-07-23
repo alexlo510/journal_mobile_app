@@ -11,7 +11,10 @@ class NewJournalEntry extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        //leading: Icon(Icons.ac_unit),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text('New Journal Entry'),
         actions: [openSettings()],
       ),
@@ -20,4 +23,5 @@ class NewJournalEntry extends StatelessWidget {
     );
   }
 }
+
 
