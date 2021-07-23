@@ -15,7 +15,7 @@ class NewJournalEntry extends StatelessWidget {
         title: Text('New Journal Entry'),
         actions: [openSettings()],
       ),
-      endDrawer: LayoutBuilder(builder: (context, constraints) => drawerDecider(context, constraints)),
+      endDrawer: LayoutBuilder(builder: drawerDecider),
       body: Text('New Journal Entry'),
     );
   }
