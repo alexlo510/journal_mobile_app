@@ -23,13 +23,16 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
             DropdownRatingFormField(
               maxRating: 4,
               onSaved: (value) {},
-              validator: (value) { (value.isEmpty) ? 'Please enter a Rating' :  null; }
+              validator: (value) => (value == null) ? 'Please enter a Rating' : null, 
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children:[
-                cancelButton(),
-                saveButton(),
+                cancelButton(context: context),
+                saveButton(
+                  context: context,
+                  formKey: formKey,
+                ),
               ],
             ),
           ],
@@ -51,7 +54,7 @@ Widget titleFormField() {
       onSaved: (value) {
 
       },
-      validator: (value) { (value!.isEmpty) ? 'Please enter a Title' :  null; }
+      validator: (value) => (value!.isEmpty) ? 'Please enter a Title' :  null,
     ),
   );
 }
@@ -67,7 +70,7 @@ Widget bodyFormField() {
       onSaved: (value) {
 
       },
-      validator: (value) { (value!.isEmpty) ? 'Please enter a Body' :  null; }
+      validator: (value) => (value!.isEmpty) ? 'Please enter a Body' :  null,
     ),
   );
 }
@@ -92,16 +95,29 @@ Widget bodyFormField() {
 //   );
 // }
 
-Widget cancelButton() {
+Widget cancelButton({required BuildContext context}) {
   return ElevatedButton(
-    onPressed: (){}, 
-    child: Text('Cancel')
+    onPressed: () => Navigator.pop(context), 
+    child: Text('Cancel'),
+    style: ElevatedButton.styleFrom(
+      primary: Colors.grey,
+      onPrimary: Colors.black,
+    ),
   );
 }
 
-Widget saveButton() {
+Widget saveButton({required BuildContext context, required dynamic formKey}) {
   return ElevatedButton(
-    onPressed: (){}, 
-    child: Text('Save')
+    onPressed: () {
+      if (formKey.currentState.validate()){
+        formKey.currentState.save();
+        Navigator.of(context).pop();
+      }
+    }, 
+    child: Text('Save'),
+    style: ElevatedButton.styleFrom(
+      primary: Colors.grey[300],
+      onPrimary: Colors.black,
+    )
   );
 }
