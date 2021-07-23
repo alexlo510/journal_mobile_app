@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 // code used from https://gist.github.com/ybakos/2769781ecd6844a38c37f4e751f41761 as mentioned in
-// the project instructions. Modified code slightly due to null safety.
+// the project instructions. (c) 2020 Yong Joseph Bakos. Modified code slightly due to null safety.
+// Usage:
+// DropdownRatingFormField(
+//   maxRating: 4,
+//   validator: (value) { /* ... */ },
+//   onSaved: (value) { /* ... */ }
+// );
 class DropdownRatingFormField extends StatefulWidget {
 
   final int maxRating;
