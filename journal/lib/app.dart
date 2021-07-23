@@ -6,7 +6,7 @@ import 'package:journal/screens/new_journal_entry.dart';
 class App extends StatefulWidget {
 
   static final routes = {
-    //JournalEntryList.routeName: (context) => JournalEntryList(),
+    JournalEntryList.routeName: (context) => JournalEntryList(),
     JournalEntry.routeName: (context) => JournalEntry(),
     NewJournalEntry.routeName: (context) => NewJournalEntry(),
   };
@@ -33,7 +33,7 @@ class _AppState extends State<App> {
       darkTheme: ThemeData.dark(),
       themeMode: darkMode ? ThemeMode.dark: ThemeMode.light,
       routes: App.routes,
-      home: JournalEntryList(darkMode: darkMode, toggleTheme: toggleTheme),
+      //home: JournalEntryList(darkMode: darkMode, toggleTheme: toggleTheme),
     );
   }
 }

@@ -5,6 +5,8 @@ import 'package:journal/components/journal_scaffold.dart';
 
 class JournalEntryList extends StatelessWidget {
 
+  static const routeName = '/';
+
   final darkMode;
   final toggleTheme;
 
