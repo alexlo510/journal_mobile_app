@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+Widget drawerDecider(BuildContext context, BoxConstraints constraints, bool darkMode, Function toggleTheme) =>
+    constraints.maxWidth < 800 ? verticalDrawer(context, drawer(context, darkMode, toggleTheme)) : drawer(context, darkMode, toggleTheme);
+
 Widget verticalDrawer(BuildContext context, Widget drawer){
   return Container(
     width: MediaQuery.of(context).size.width * 0.75,
@@ -7,7 +10,7 @@ Widget verticalDrawer(BuildContext context, Widget drawer){
   );
 }
 
-Widget drawer(bool darkMode, Function toggleTheme){
+Widget drawer(BuildContext context, bool darkMode, Function toggleTheme){
   return Drawer(
     child: ListView(
       children: [
