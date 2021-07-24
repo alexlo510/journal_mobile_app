@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:journal/screens/journal_entry.dart';
+import 'package:journal/screens/journal_entry_details.dart';
 import 'package:journal/screens/journal_entry_list.dart';
 import 'package:journal/screens/new_journal_entry.dart';
 
@@ -9,7 +9,7 @@ class App extends StatefulWidget {
 
   static final routes = {
     JournalEntryList.routeName: (context) => JournalEntryList(),
-    JournalEntry.routeName: (context) => JournalEntry(),
+    JournalEntryDetailsScreen.routeName: (context) => JournalEntryDetailsScreen(),
     NewJournalEntry.routeName: (context) => NewJournalEntry(),
   };
 
