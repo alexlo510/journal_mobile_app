@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:journal/screens/new_journal_entry.dart';
 import 'package:journal/components/journal_drawer.dart';
 import 'package:journal/components/journal_scaffold.dart';
+import 'package:journal/components/welcome.dart';
 import 'package:journal/models/journal.dart';
 import 'package:journal/models/journal_entry.dart';
 
@@ -20,21 +21,21 @@ class _JournalEntryListState extends State<JournalEntryList> {
   void initState() {
     super.initState();
     //journal = Journal.fake(); //use as test
-    //journal = Journal.empty(); //use as test
-    journal = Journal(
-      journalEntriesList: [
-        JournalEntry(
-          title: 'Test Title',
-          body: 'Test Body',
-          rating: 1,
-        )
-      ]
-    ); //use as test
+    journal = Journal.empty(); //use as test
+    // journal = Journal(
+    //   journalEntriesList: [
+    //     JournalEntry(
+    //       title: 'Test Title',
+    //       body: 'Test Body',
+    //       rating: 1,
+    //     )
+    //   ]
+    // ); //use as test
     print(journal?.journalEntriesList); //remove 
   }
 
   void loadJournal(){
-
+    // insert loading journal stuff here
   }
 
   @override
@@ -46,7 +47,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
         title: journal?.isEmpty ? Text('Welcome') : Text('Journal Entry List'),
         actions: [openSettings()],
       ),
-      body: journal?.isEmpty ? Text('Welcome') : LayoutBuilder(builder: layoutDecider), // put welcome page in place of text
+      body: journal?.isEmpty ? welcome(context) : LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
         onPressed: () {pushNewJournalEntry(context);},
