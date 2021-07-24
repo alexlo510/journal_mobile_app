@@ -3,6 +3,7 @@ import 'package:journal/screens/new_journal_entry.dart';
 import 'package:journal/components/journal_drawer.dart';
 import 'package:journal/components/journal_scaffold.dart';
 import 'package:journal/models/journal.dart';
+import 'package:journal/models/journal_entry.dart';
 
 class JournalEntryList extends StatefulWidget {
 
@@ -18,12 +19,27 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   void initState() {
     super.initState();
-    journal = Journal.fake();
+    //journal = Journal.fake(); //use as test
+    //journal = Journal.empty(); //use as test
+    journal = Journal(
+      journalEntriesList: [
+        JournalEntry(
+          title: 'Test Title',
+          body: 'Test Body',
+          rating: 1,
+        )
+      ]
+    ); //use as test
     print(journal?.journalEntriesList); //remove 
+  }
+
+  void loadJournal(){
+
   }
 
   @override
   Widget build(BuildContext context) {
+    print(journal?.journalEntriesList);
     return Scaffold(
       endDrawer: LayoutBuilder(builder: drawerDecider),
       appBar: AppBar(

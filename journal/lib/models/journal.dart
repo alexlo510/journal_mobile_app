@@ -15,6 +15,11 @@ class Journal {
     )
   ];
 
-  get isEmpty => true; // use as test for now
+  Journal.empty() : journalEntriesList = [];
+
+  get isTrue => true; // use as test for now
+  get isFalse => false; // use as test for now
+  get isEmpty => this.journalEntriesList.isEmpty; // use as test for now
+
 
 }
