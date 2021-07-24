@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:journal/screens/new_journal_entry.dart';
+import 'package:journal/screens/journal_entry_details.dart';
 import 'package:journal/components/journal_drawer.dart';
 import 'package:journal/components/journal_scaffold.dart';
 import 'package:journal/components/welcome.dart';
 import 'package:journal/models/journal.dart';
-import 'package:journal/models/journal_entry.dart';
+import 'package:journal/models/journal_entry.dart'; // will use when loading db
 
 class JournalEntryList extends StatefulWidget {
 
@@ -20,8 +21,8 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   void initState() {
     super.initState();
-    //journal = Journal.fake(); //use as test
-    journal = Journal.empty(); //use as test
+    journal = Journal.fake(); //use as test
+    //journal = Journal.empty(); //use as test
     // journal = Journal(
     //   journalEntriesList: [
     //     JournalEntry(
@@ -40,7 +41,6 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   @override
   Widget build(BuildContext context) {
-    print(journal?.journalEntriesList);
     return Scaffold(
       endDrawer: LayoutBuilder(builder: drawerDecider),
       appBar: AppBar(
@@ -50,19 +50,26 @@ class _JournalEntryListState extends State<JournalEntryList> {
       body: journal?.isEmpty ? welcome(context) : LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
-        onPressed: () {pushNewJournalEntry(context);},
+        onPressed: () {displayNewJournalEntry(context);},
       ),
     );
   }
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
-    constraints.maxWidth < 800 ? VerticalLayout(): HorizontalLayout();
+    constraints.maxWidth < 800 ? JournalEntryListPageBody(context): HorizontalLayout();
 
-  // Widget JournalEntryListPageBody(BuildContext context) {
-  //   return ListView.builder(
-  //     itemCount: ,
-  //   );
-  // }
+  Widget JournalEntryListPageBody(BuildContext context) {
+    return ListView.builder(
+      itemCount: journal?.numberOfEntries,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text('${journal?.journalEntriesList[index].title}'),
+          subtitle: Text('${journal?.journalEntriesList[index].dateTime}'),
+          onTap: () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);},
+        );
+      },
+    );
+  }
 
 }
 
@@ -80,6 +87,10 @@ class HorizontalLayout extends StatelessWidget {
   }
 }
 
-void pushNewJournalEntry(BuildContext context) {
+void displayNewJournalEntry(BuildContext context) {
   Navigator.of(context).pushNamed(NewJournalEntry.routeName);
+}
+
+void displayJournalEntryDetails(BuildContext context, JournalEntry? journalEntry) {
+  Navigator.of(context).pushNamed(JournalEntryDetailsScreen.routeName, arguments: journalEntry);
 }
