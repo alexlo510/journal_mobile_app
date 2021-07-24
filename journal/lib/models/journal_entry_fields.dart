@@ -1,3 +1,5 @@
+// USE DTO INSTEAD?
+
 class JournalEntryFields {
   String? title;
   String? body;
