@@ -1,12 +1,10 @@
 class JournalEntry {
-  int id;
   String? title;
   String? body;
   int? rating;
   DateTime? dateTime;
 
   JournalEntry({
-    required this.id,
     this.title,
     this.body,
     this.rating,
@@ -14,6 +12,6 @@ class JournalEntry {
   });
 
   String toString() {
-    return 'ID: $id, Title: $title, Body: $body, Rating: $rating, Time: $dateTime';
+    return 'Title: $title, Body: $body, Rating: $rating, Time: $dateTime';
   }
 }
