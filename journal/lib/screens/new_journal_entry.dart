@@ -20,7 +20,9 @@ class NewJournalEntry extends StatelessWidget {
         actions: [openSettings()],
       ),
       endDrawer: LayoutBuilder(builder: drawerDecider),
-      body: JournalEntryForm(),
+      body: SafeArea(
+        child: JournalEntryForm()
+      ),
     );
   }
 }
