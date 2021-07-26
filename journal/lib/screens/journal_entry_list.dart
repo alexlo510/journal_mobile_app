@@ -21,8 +21,8 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   void initState() {
     super.initState();
-    journal = Journal.fake(); //use as test
-    //journal = Journal.empty(); //use as test
+    //journal = Journal.fake(); //use as test
+    journal = Journal.empty(); //use as test
     // journal = Journal(
     //   journalEntriesList: [
     //     JournalEntry(
@@ -56,7 +56,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
   }
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
-    constraints.maxWidth < 800 ? JournalEntryListPageBody(context): HorizontalLayout();
+    constraints.maxWidth < 800 ? JournalEntryListPageBody(context): HorizontalLayout(leftWidget: JournalEntryListPageBody(context), rightWidget: Text('test'));
 
   Widget JournalEntryListPageBody(BuildContext context) {
     return ListView.builder(
@@ -80,7 +80,21 @@ class VerticalLayout extends StatelessWidget {
   }
 }
 
-class HorizontalLayout extends StatelessWidget {
+class HorizontalLayout extends StatefulWidget {
+
+  final leftWidget;
+  final rightWidget;
+
+  HorizontalLayout({
+    required this.leftWidget,
+    required this.rightWidget,
+  });
+
+  @override
+  _HorizontalLayoutState createState() => _HorizontalLayoutState();
+}
+
+class _HorizontalLayoutState extends State<HorizontalLayout> {
   @override
   Widget build(BuildContext context) {
     return Text('Horizontal');
