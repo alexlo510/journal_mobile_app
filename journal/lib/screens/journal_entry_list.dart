@@ -29,6 +29,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
     //       title: 'Test Title',
     //       body: 'Test Body',
     //       rating: 1,
+    //       dateTime: DateTime.now()
     //     )
     //   ]
     // ); //use as test
@@ -80,7 +81,7 @@ Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints
     itemBuilder: (context, index) {
       return ListTile(
         title: Text('${journal?.journalEntriesList[index].title}'),
-        subtitle: Text('${journal?.journalEntriesList[index].dateTime}'),
+        subtitle: Text('${journal?.journalEntriesList[index].dateTime}'), // NEED TO ADD A FUNCTION TO PARSE THIS LATER
         onTap: (constraints.maxWidth < 800) ? () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);} :
                 (){action!(index);},
       );
