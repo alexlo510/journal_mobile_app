@@ -57,7 +57,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
     constraints.maxWidth < 800 ? JournalEntryListPageBody(context, constraints, journal): 
-                                HorizontalLayout(journal: journal, constraints: constraints);
+    HorizontalJournalEntryListLayout(journal: journal, constraints: constraints);
 
   // Widget JournalEntryListPageBody(BuildContext context) {
   //   return ListView.builder(
@@ -88,28 +88,28 @@ Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints
   );
 }
 
-class VerticalLayout extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text('Vertical');
-  }
-}
+// class VerticalLayout extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Text('Vertical');
+//   }
+// }
 
-class HorizontalLayout extends StatefulWidget {
+class HorizontalJournalEntryListLayout extends StatefulWidget {
 
   final Journal? journal;
   final BoxConstraints constraints;
 
-  HorizontalLayout({
+  HorizontalJournalEntryListLayout({
     required this.constraints,
     required this.journal,
   });
 
   @override
-  _HorizontalLayoutState createState() => _HorizontalLayoutState();
+  _HorizontalJournalEntryListLayoutState createState() => _HorizontalJournalEntryListLayoutState();
 }
 
-class _HorizontalLayoutState extends State<HorizontalLayout> {
+class _HorizontalJournalEntryListLayoutState extends State<HorizontalJournalEntryListLayout> {
 
   var journalIndex = 0;
 
