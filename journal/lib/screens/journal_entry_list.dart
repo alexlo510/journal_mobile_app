@@ -39,7 +39,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   void loadJournal() async {
     // insert loading journal stuff here
-    journal = Journal.fake();
+    //journal = Journal.fake();
     final Database database = await openDatabase(
       'journal.sqlite3.db',
       version: 1,
@@ -48,10 +48,28 @@ class _JournalEntryListState extends State<JournalEntryList> {
       }
     );
     List<Map> journalRecords = await database.rawQuery('SELECT * FROM journal_entries');
+    final journalEntries = journalRecords.map((record) {
+      return JournalEntry(
+        title: record['title'],
+        body: record['body'],
+        rating: record['rating'],
+        dateTime: DateTime.parse(record['date']));
+    }).toList();
+    setState( () {
+      journal = Journal(journalEntriesList: journalEntries);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (journal == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Loading...'),
+          ),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       endDrawer: LayoutBuilder(builder: drawerDecider),
       appBar: AppBar(
