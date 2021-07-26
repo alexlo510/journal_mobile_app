@@ -21,8 +21,8 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   void initState() {
     super.initState();
-    //journal = Journal.fake(); //use as test
-    journal = Journal.empty(); //use as test
+    journal = Journal.fake(); //use as test
+    //journal = Journal.empty(); //use as test
     // journal = Journal(
     //   journalEntriesList: [
     //     JournalEntry(
@@ -56,21 +56,36 @@ class _JournalEntryListState extends State<JournalEntryList> {
   }
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
-    constraints.maxWidth < 800 ? JournalEntryListPageBody(context): HorizontalLayout(leftWidget: JournalEntryListPageBody(context), rightWidget: Text('test'));
+    constraints.maxWidth < 800 ? JournalEntryListPageBody(context, constraints, journal): 
+                                HorizontalLayout(journal: journal, constraints: constraints);
 
-  Widget JournalEntryListPageBody(BuildContext context) {
-    return ListView.builder(
-      itemCount: journal?.numberOfEntries,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text('${journal?.journalEntriesList[index].title}'),
-          subtitle: Text('${journal?.journalEntriesList[index].dateTime}'),
-          onTap: () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);},
-        );
-      },
-    );
-  }
+  // Widget JournalEntryListPageBody(BuildContext context) {
+  //   return ListView.builder(
+  //     itemCount: journal?.numberOfEntries,
+  //     itemBuilder: (context, index) {
+  //       return ListTile(
+  //         title: Text('${journal?.journalEntriesList[index].title}'),
+  //         subtitle: Text('${journal?.journalEntriesList[index].dateTime}'),
+  //         onTap: () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);},
+  //       );
+  //     },
+  //   );
+  // }
 
+}
+
+Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints, Journal? journal, {Function? action}) {
+  return ListView.builder(
+    itemCount: journal?.numberOfEntries,
+    itemBuilder: (context, index) {
+      return ListTile(
+        title: Text('${journal?.journalEntriesList[index].title}'),
+        subtitle: Text('${journal?.journalEntriesList[index].dateTime}'),
+        onTap: (constraints.maxWidth < 800) ? () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);} :
+                (){action!(index);},
+      );
+    },
+  );
 }
 
 class VerticalLayout extends StatelessWidget {
@@ -82,12 +97,12 @@ class VerticalLayout extends StatelessWidget {
 
 class HorizontalLayout extends StatefulWidget {
 
-  final leftWidget;
-  final rightWidget;
+  final Journal? journal;
+  final BoxConstraints constraints;
 
   HorizontalLayout({
-    required this.leftWidget,
-    required this.rightWidget,
+    required this.constraints,
+    required this.journal,
   });
 
   @override
@@ -95,9 +110,23 @@ class HorizontalLayout extends StatefulWidget {
 }
 
 class _HorizontalLayoutState extends State<HorizontalLayout> {
+
+  var journalIndex = 0;
+
+  void settingState(index){
+    setState(() {
+      journalIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Text('Horizontal');
+    return Row(
+      children: [
+        Expanded(child: JournalEntryListPageBody(context, widget.constraints, widget.journal, action: settingState)),
+        Expanded(child: journalEntryDetails(context, widget.journal?.journalEntriesList[journalIndex])),
+      ],
+    );
   }
 }
 
@@ -108,3 +137,4 @@ void displayNewJournalEntry(BuildContext context) {
 void displayJournalEntryDetails(BuildContext context, JournalEntry? journalEntry) {
   Navigator.of(context).pushNamed(JournalEntryDetailsScreen.routeName, arguments: journalEntry);
 }
+

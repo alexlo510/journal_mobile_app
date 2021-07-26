@@ -27,14 +27,14 @@ class JournalEntryDetailsScreen extends StatelessWidget {
 
 }
 
-Widget journalEntryDetails(BuildContext context, JournalEntry journalEntry) {
+Widget journalEntryDetails(BuildContext context, JournalEntry? journalEntry) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('${journalEntry.title}'),
-          Text('${journalEntry.body}')
+          Text('${journalEntry?.title}'),
+          Text('${journalEntry?.body}')
         ],
       ),
     );
