@@ -12,11 +12,13 @@ class Journal {
         title: 'Test Title 1',
         body: 'Test Body 1',
         rating: 1,
+        dateTime: DateTime.now(),
     ),
     JournalEntry(
         title: 'Test Title 2',
         body: 'Test Body 2',
         rating: 2,
+        dateTime: DateTime.now(),
     )
   ];
 
@@ -26,6 +28,4 @@ class Journal {
   get isFalse => false; // use as test for now
   get isEmpty => this.journalEntriesList.isEmpty; // use as test for now
   get numberOfEntries => this.journalEntriesList.length;
-
-
 }

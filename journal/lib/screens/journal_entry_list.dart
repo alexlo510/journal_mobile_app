@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:journal/screens/new_journal_entry.dart';
 import 'package:journal/screens/journal_entry_details.dart';
 import 'package:journal/components/journal_drawer.dart';
@@ -21,7 +22,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   void initState() {
     super.initState();
-    journal = Journal.fake(); //use as test
+    //journal = Journal.fake(); //use as test
     //journal = Journal.empty(); //use as test
     // journal = Journal(
     //   journalEntriesList: [
@@ -29,18 +30,47 @@ class _JournalEntryListState extends State<JournalEntryList> {
     //       title: 'Test Title',
     //       body: 'Test Body',
     //       rating: 1,
+    //       dateTime: DateTime.now()
     //     )
     //   ]
     // ); //use as test
-    print(journal?.journalEntriesList); //remove 
+    loadJournal();
   }
 
-  void loadJournal(){
+  void loadJournal() async {
     // insert loading journal stuff here
+    //journal = Journal.fake();
+    final Database database = await openDatabase(
+      'journal.sqlite3.db',
+      version: 1,
+      onCreate: (Database db, int version) async {
+        await db.execute('CREATE TABLE IF NOT EXISTS journal_entries(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, body TEXT NOT NULL, rating INTEGER NOT NULL, date TEXT NOT NULL)');
+      }
+    );
+    List<Map> journalRecords = await database.rawQuery('SELECT * FROM journal_entries');
+    final journalEntries = journalRecords.map((record) {
+      return JournalEntry(
+        title: record['title'],
+        body: record['body'],
+        rating: record['rating'],
+        dateTime: DateTime.parse(record['date']));
+    }).toList();
+    print(journalRecords);
+    setState( () {
+      journal = Journal(journalEntriesList: journalEntries);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (journal == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Loading...'),
+          ),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       endDrawer: LayoutBuilder(builder: drawerDecider),
       appBar: AppBar(
@@ -50,45 +80,87 @@ class _JournalEntryListState extends State<JournalEntryList> {
       body: journal?.isEmpty ? welcome(context) : LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
-        onPressed: () {displayNewJournalEntry(context);},
+        onPressed: () {displayNewJournalEntry(context, loadJournal);},
       ),
     );
   }
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
-    constraints.maxWidth < 800 ? JournalEntryListPageBody(context): HorizontalLayout();
+    constraints.maxWidth < 800 ? JournalEntryListPageBody(context, constraints, journal): 
+    HorizontalJournalEntryListLayout(journal: journal, constraints: constraints);
 
-  Widget JournalEntryListPageBody(BuildContext context) {
-    return ListView.builder(
-      itemCount: journal?.numberOfEntries,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text('${journal?.journalEntriesList[index].title}'),
-          subtitle: Text('${journal?.journalEntriesList[index].dateTime}'),
-          onTap: () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);},
-        );
-      },
+  // Widget JournalEntryListPageBody(BuildContext context) {
+  //   return ListView.builder(
+  //     itemCount: journal?.numberOfEntries,
+  //     itemBuilder: (context, index) {
+  //       return ListTile(
+  //         title: Text('${journal?.journalEntriesList[index].title}'),
+  //         subtitle: Text('${journal?.journalEntriesList[index].dateTime}'),
+  //         onTap: () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);},
+  //       );
+  //     },
+  //   );
+  // }
+}
+
+Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints, Journal? journal, {Function? action}) {
+  return ListView.builder(
+    itemCount: journal?.numberOfEntries,
+    itemBuilder: (context, index) {
+      return ListTile(
+        title: Text('${journal?.journalEntriesList[index].title}'),
+        subtitle: Text('${journal?.journalEntriesList[index].dateTime}'), // NEED TO ADD A FUNCTION TO PARSE THIS LATER
+        onTap: (constraints.maxWidth < 800) ? () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);} :
+                (){action!(index);},
+      );
+    },
+  );
+}
+
+// class VerticalLayout extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Text('Vertical');
+//   }
+// }
+
+class HorizontalJournalEntryListLayout extends StatefulWidget {
+
+  final Journal? journal;
+  final BoxConstraints constraints;
+
+  HorizontalJournalEntryListLayout({
+    required this.constraints,
+    required this.journal,
+  });
+
+  @override
+  _HorizontalJournalEntryListLayoutState createState() => _HorizontalJournalEntryListLayoutState();
+}
+
+class _HorizontalJournalEntryListLayoutState extends State<HorizontalJournalEntryListLayout> {
+
+  var journalIndex = 0;
+
+  void settingState(index){
+    setState(() {
+      journalIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: JournalEntryListPageBody(context, widget.constraints, widget.journal, action: settingState)),
+        Expanded(child: journalEntryDetails(context, widget.journal?.journalEntriesList[journalIndex])),
+      ],
     );
   }
-
 }
 
-class VerticalLayout extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text('Vertical');
-  }
-}
-
-class HorizontalLayout extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text('Horizontal');
-  }
-}
-
-void displayNewJournalEntry(BuildContext context) {
-  Navigator.of(context).pushNamed(NewJournalEntry.routeName);
+void displayNewJournalEntry(BuildContext context, Function args) {
+    Navigator.of(context).pushNamed(NewJournalEntry.routeName, arguments: args);
 }
 
 void displayJournalEntryDetails(BuildContext context, JournalEntry? journalEntry) {

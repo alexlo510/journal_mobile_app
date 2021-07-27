@@ -1,12 +1,10 @@
-// USE DTO INSTEAD?
-
-class JournalEntryFields {
+class JournalEntryDTO {
   String? title;
   String? body;
   int? rating;
   DateTime? dateTime;
 
-  JournalEntryFields({
+  JournalEntryDTO({
     this.title,
     this.body,
     this.rating,
