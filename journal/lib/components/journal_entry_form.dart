@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:journal/components/drop_down_rating_form_field.dart';
+import 'package:journal/db/database_manager.dart';
 import 'package:journal/db/journal_entry_dto.dart';
 
 class JournalEntryForm extends StatefulWidget {
@@ -102,20 +102,8 @@ Widget saveButton({required BuildContext context, required dynamic formKey, requ
         formKey.currentState.save();
         addDateToJournalEntryValues(journalEntryValues: journalEntryValues);
         // do database work here
-        await deleteDatabase('journal.sqlite3.db');
-        final Database database = await openDatabase(
-          'journal.sqlite3.db',
-          version: 1,
-          onCreate: (Database db, int version) async {
-            await db.execute('CREATE TABLE IF NOT EXISTS journal_entries(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, body TEXT NOT NULL, rating INTEGER NOT NULL, date TEXT NOT NULL)');
-          }
-        );
-        await database.transaction((txn) async {
-          await txn.rawInsert('INSERT INTO journal_entries(title, body, rating, date) VALUES(?, ?, ?, ?)',
-            [journalEntryValues.title, journalEntryValues.body, journalEntryValues.rating, journalEntryValues.dateTime.toString()]
-          ); 
-        });
-        //await database.close();
+        final databaseManager = DatabaseManager.getInstance();
+        databaseManager.saveJournalEntry(dto: journalEntryValues);
         //
         loadJournal();
         Navigator.of(context).pop();
