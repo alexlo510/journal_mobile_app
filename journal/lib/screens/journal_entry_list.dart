@@ -55,6 +55,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
         rating: record['rating'],
         dateTime: DateTime.parse(record['date']));
     }).toList();
+    print(journalRecords);
     setState( () {
       journal = Journal(journalEntriesList: journalEntries);
     });
@@ -79,7 +80,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
       body: journal?.isEmpty ? welcome(context) : LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
-        onPressed: () {displayNewJournalEntry(context);},
+        onPressed: () {displayNewJournalEntry(context, loadJournal);},
       ),
     );
   }
@@ -100,7 +101,6 @@ class _JournalEntryListState extends State<JournalEntryList> {
   //     },
   //   );
   // }
-
 }
 
 Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints, Journal? journal, {Function? action}) {
@@ -159,11 +159,10 @@ class _HorizontalJournalEntryListLayoutState extends State<HorizontalJournalEntr
   }
 }
 
-void displayNewJournalEntry(BuildContext context) {
-  Navigator.of(context).pushNamed(NewJournalEntry.routeName);
+void displayNewJournalEntry(BuildContext context, Function args) {
+    Navigator.of(context).pushNamed(NewJournalEntry.routeName, arguments: args);
 }
 
 void displayJournalEntryDetails(BuildContext context, JournalEntry? journalEntry) {
   Navigator.of(context).pushNamed(JournalEntryDetailsScreen.routeName, arguments: journalEntry);
 }
-
