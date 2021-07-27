@@ -15,6 +15,8 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
 
   @override
   Widget build(BuildContext context) {
+    Function loadJournal = ModalRoute.of(context)?.settings.arguments as Function;
+
     return Form(
       key: formKey,
       child: Padding(
@@ -38,6 +40,7 @@ class _JournalEntryFormState extends State<JournalEntryForm> {
                   context: context,
                   formKey: formKey,
                   journalEntryValues: journalEntryValues,
+                  loadJournal: loadJournal,
                 ),
               ],
             ),
@@ -92,7 +95,7 @@ Widget cancelButton({required BuildContext context}) {
   );
 }
 
-Widget saveButton({required BuildContext context, required dynamic formKey, required JournalEntryDTO journalEntryValues}) {
+Widget saveButton({required BuildContext context, required dynamic formKey, required JournalEntryDTO journalEntryValues, required Function loadJournal}) {
   return ElevatedButton(
     onPressed: () async {
       if (formKey.currentState.validate()){
@@ -109,11 +112,12 @@ Widget saveButton({required BuildContext context, required dynamic formKey, requ
         );
         await database.transaction((txn) async {
           await txn.rawInsert('INSERT INTO journal_entries(title, body, rating, date) VALUES(?, ?, ?, ?)',
-            [journalEntryValues.title, journalEntryValues.body, journalEntryValues.rating, journalEntryValues.dateTime]
+            [journalEntryValues.title, journalEntryValues.body, journalEntryValues.rating, journalEntryValues.dateTime.toString()]
           ); 
         });
-        await database.close();
+        //await database.close();
         //
+        loadJournal();
         Navigator.of(context).pop();
       }
     }, 
