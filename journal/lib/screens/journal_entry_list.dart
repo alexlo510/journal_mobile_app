@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:journal/screens/new_journal_entry.dart';
 import 'package:journal/screens/journal_entry_details.dart';
 import 'package:journal/components/journal_drawer.dart';
 import 'package:journal/components/journal_scaffold.dart';
 import 'package:journal/components/welcome.dart';
+import 'package:journal/db/database_manager.dart';
+import 'package:journal/db/journal_entry_dao.dart';
 import 'package:journal/models/journal.dart';
-import 'package:journal/models/journal_entry.dart'; // will use when loading db
+import 'package:journal/models/journal_entry.dart';
 
 class JournalEntryList extends StatefulWidget {
 
@@ -38,24 +39,9 @@ class _JournalEntryListState extends State<JournalEntryList> {
   }
 
   void loadJournal() async {
-    // insert loading journal stuff here
-    //journal = Journal.fake();
-    final Database database = await openDatabase(
-      'journal.sqlite3.db',
-      version: 1,
-      onCreate: (Database db, int version) async {
-        await db.execute('CREATE TABLE IF NOT EXISTS journal_entries(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, body TEXT NOT NULL, rating INTEGER NOT NULL, date TEXT NOT NULL)');
-      }
-    );
-    List<Map> journalRecords = await database.rawQuery('SELECT * FROM journal_entries');
-    final journalEntries = journalRecords.map((record) {
-      return JournalEntry(
-        title: record['title'],
-        body: record['body'],
-        rating: record['rating'],
-        dateTime: DateTime.parse(record['date']));
-    }).toList();
-    print(journalRecords);
+    final databaseManager = DatabaseManager.getInstance();
+    List<JournalEntry> journalEntries = await JournalEntryDAO.journalEntries(databaseManager: databaseManager);
+    print(journalEntries);
     setState( () {
       journal = Journal(journalEntriesList: journalEntries);
     });
