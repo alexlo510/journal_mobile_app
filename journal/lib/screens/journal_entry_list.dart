@@ -62,25 +62,28 @@ class _JournalEntryListState extends State<JournalEntryList> {
       body: journal?.isEmpty ? welcome(context) : LayoutBuilder(builder: layoutDecider),
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
-        onPressed: () {displayNewJournalEntry(context, loadJournal);},
+        onPressed: () {
+          displayNewJournalEntry(context, loadJournal);},
       ),
     );
   }
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
-    constraints.maxWidth < 800 ? JournalEntryListPageBody(context, constraints, journal): 
+    constraints.maxWidth < 800 ? JournalEntryListPageBody(context, constraints, journal, settingLastPressedIndex: settingLastPressedIndex): 
     HorizontalJournalEntryListLayout(journal: journal, constraints: constraints, lastPressedJournalIndex: lastPressedJournalIndex, settingLastPressedIndex: settingLastPressedIndex,);
 }
 
-Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints, Journal? journal, {Function? action}) {
+Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints, Journal? journal, {required Function settingLastPressedIndex}) {
   return ListView.builder(
     itemCount: journal?.numberOfEntries,
     itemBuilder: (context, index) {
       return ListTile(
         title: Text('${journal?.journalEntriesList[index].title}'),
         subtitle: Text('${DateFormat('EEEE, MMMM d, yyyy').format(journal?.journalEntriesList[index].dateTime as DateTime)}'),
-        onTap: (constraints.maxWidth < 800) ? () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);} :
-                (){action!(index);},
+        onTap: (constraints.maxWidth < 800) ? () {
+          settingLastPressedIndex(index);
+          displayJournalEntryDetails(context, journal?.journalEntriesList[index]);
+          } : () {settingLastPressedIndex(index);},
       );
     },
   );
@@ -110,7 +113,7 @@ class _HorizontalJournalEntryListLayoutState extends State<HorizontalJournalEntr
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: JournalEntryListPageBody(context, widget.constraints, widget.journal, action: widget.settingLastPressedIndex)),
+        Expanded(child: JournalEntryListPageBody(context, widget.constraints, widget.journal, settingLastPressedIndex: widget.settingLastPressedIndex)),
         Expanded(child: journalEntryDetails(context, widget.journal?.journalEntriesList[widget.lastPressedJournalIndex])),
       ],
     );
