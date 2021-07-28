@@ -30,7 +30,6 @@ class _JournalEntryListState extends State<JournalEntryList> {
   void loadJournal() async {
     final databaseManager = DatabaseManager.getInstance();
     List<JournalEntry> journalEntries = await JournalEntryDAO.journalEntries(databaseManager: databaseManager);
-    print(journalEntries);
     setState( () {
       journal = Journal(journalEntriesList: journalEntries);
     });
