@@ -47,20 +47,3 @@ class AppState extends State<App> {
     );
   }
 }
-
-// Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
-//     constraints.maxWidth < 800 ? VerticalLayout() : HorizontalLayout();
-
-// class VerticalLayout extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Text('Vertical');
-//   }
-// }
-
-// class HorizontalLayout extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Text('Horizontal');
-//   }
-// }
