@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:journal/screens/new_journal_entry.dart';
 import 'package:journal/screens/journal_entry_details.dart';
 import 'package:journal/components/journal_drawer.dart';
@@ -70,7 +71,7 @@ Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints
     itemBuilder: (context, index) {
       return ListTile(
         title: Text('${journal?.journalEntriesList[index].title}'),
-        subtitle: Text('${journal?.journalEntriesList[index].dateTime}'), // NEED TO ADD A FUNCTION TO PARSE THIS LATER
+        subtitle: Text('${DateFormat('EEEE, MMMM d, yyyy').format(journal?.journalEntriesList[index].dateTime as DateTime)}'), // NEED TO ADD A FUNCTION TO PARSE THIS LATER
         onTap: (constraints.maxWidth < 800) ? () {displayJournalEntryDetails(context, journal?.journalEntriesList[index]);} :
                 (){action!(index);},
       );
