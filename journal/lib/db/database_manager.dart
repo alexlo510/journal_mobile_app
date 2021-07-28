@@ -1,15 +1,15 @@
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:journal/db/journal_entry_dto.dart';
+
+const SQL_CREATE_SCHEMA_PATH = 'assets/schema_1.sql.txt';
 
 class DatabaseManager {
 
   static const String DATABASE_FILENAME = 'journal.sqlite3.db';
   static const String SQL_INSERT = 'INSERT INTO journal_entries(title, body, rating, date) VALUES(?, ?, ?, ?)';
   static const String SQL_SELECT = 'SELECT * FROM journal_entries';
-
-  // delete this later and get string from a file
-  static String SQL_CREATE_SCHEMA = 'CREATE TABLE IF NOT EXISTS journal_entries(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, body TEXT NOT NULL, rating INTEGER NOT NULL, date TEXT NOT NULL)';
-
+  
   static DatabaseManager? _instance;
 
   final Database db;
@@ -25,7 +25,7 @@ class DatabaseManager {
     final db = await openDatabase(DATABASE_FILENAME,
       version: 1,
       onCreate: (Database db, int version) async {
-        createTables(db, SQL_CREATE_SCHEMA);
+        createTables(db, await loadSchemaFromRootBundle());
       }
     );
     _instance = DatabaseManager._(database: db);
@@ -46,4 +46,9 @@ class DatabaseManager {
   Future<List<Map<String, dynamic>>> journalEntries() {
     return db.rawQuery(SQL_SELECT);
   }
+
+  static Future<String> loadSchemaFromRootBundle() async {
+    return await rootBundle.loadString(SQL_CREATE_SCHEMA_PATH);
+  }
+
 }
