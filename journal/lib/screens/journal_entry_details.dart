@@ -34,7 +34,13 @@ Widget journalEntryDetails(BuildContext context, JournalEntry? journalEntry) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${journalEntry?.title}'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text(
+                '${journalEntry?.title}',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ),
             Text('${journalEntry?.body}')
           ],
         ),
