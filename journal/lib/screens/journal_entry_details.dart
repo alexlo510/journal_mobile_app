@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:journal/components/journal_drawer.dart';
 import 'package:journal/components/journal_scaffold.dart';
 import 'package:journal/models/journal_entry.dart';
@@ -41,7 +42,12 @@ Widget journalEntryDetails(BuildContext context, JournalEntry? journalEntry) {
                 style: Theme.of(context).textTheme.headline4,
               ),
             ),
-            Text('${journalEntry?.body}')
+            Text('${DateFormat('EEEE, MMMM d, yyyy').format(journalEntry?.dateTime as DateTime)}'),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text('Rating: ${journalEntry?.rating}'),
+            ),
+            Text('${journalEntry?.body}'),
           ],
         ),
       ),
