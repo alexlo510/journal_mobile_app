@@ -22,9 +22,17 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   Journal? journal;
 
+  var lastPressedJournalIndex = 0;
+
   void initState() {
     super.initState();
     loadJournal();
+  }
+
+  void settingLastPressedIndex(index){
+    setState(() {
+      lastPressedJournalIndex = index;
+    });
   }
 
   void loadJournal() async {
@@ -61,7 +69,7 @@ class _JournalEntryListState extends State<JournalEntryList> {
 
   Widget layoutDecider(BuildContext context, BoxConstraints constraints) =>
     constraints.maxWidth < 800 ? JournalEntryListPageBody(context, constraints, journal): 
-    HorizontalJournalEntryListLayout(journal: journal, constraints: constraints);
+    HorizontalJournalEntryListLayout(journal: journal, constraints: constraints, lastPressedJournalIndex: lastPressedJournalIndex, settingLastPressedIndex: settingLastPressedIndex,);
 }
 
 Widget JournalEntryListPageBody(BuildContext context, BoxConstraints constraints, Journal? journal, {Function? action}) {
@@ -82,10 +90,14 @@ class HorizontalJournalEntryListLayout extends StatefulWidget {
 
   final Journal? journal;
   final BoxConstraints constraints;
+  final int lastPressedJournalIndex;
+  final void Function(dynamic) settingLastPressedIndex;
 
   HorizontalJournalEntryListLayout({
     required this.constraints,
     required this.journal,
+    required this.lastPressedJournalIndex,
+    required this.settingLastPressedIndex,
   });
 
   @override
@@ -94,20 +106,12 @@ class HorizontalJournalEntryListLayout extends StatefulWidget {
 
 class _HorizontalJournalEntryListLayoutState extends State<HorizontalJournalEntryListLayout> {
 
-  var journalIndex = 0;
-
-  void settingState(index){
-    setState(() {
-      journalIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: JournalEntryListPageBody(context, widget.constraints, widget.journal, action: settingState)),
-        Expanded(child: journalEntryDetails(context, widget.journal?.journalEntriesList[journalIndex])),
+        Expanded(child: JournalEntryListPageBody(context, widget.constraints, widget.journal, action: widget.settingLastPressedIndex)),
+        Expanded(child: journalEntryDetails(context, widget.journal?.journalEntriesList[widget.lastPressedJournalIndex])),
       ],
     );
   }
