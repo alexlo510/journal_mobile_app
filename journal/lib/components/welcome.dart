@@ -18,19 +18,3 @@ Widget welcome(BuildContext context) {
     ),
   );
 }
-
-// double heightPadding(BuildContext context, paddingSize) {
-//   if (MediaQuery.of(context).orientation == Orientation.landscape) {
-//     return MediaQuery.of(context).size.height * 5 * paddingSize;
-//   } else {
-//     return MediaQuery.of(context).size.height * paddingSize;
-//   }
-// }
-
-// double widthPadding(BuildContext context, paddingSize) {
-//   if (MediaQuery.of(context).orientation == Orientation.landscape) {
-//     return MediaQuery.of(context).size.width * 0.2 * paddingSize;
-//   } else {
-//     return MediaQuery.of(context).size.width * paddingSize;
-//   }
-// }
