@@ -63,7 +63,8 @@ class _JournalEntryListState extends State<JournalEntryList> {
       floatingActionButton: FloatingActionButton(
         child : Icon(Icons.add),
         onPressed: () {
-          displayNewJournalEntry(context, loadJournal);},
+          displayNewJournalEntry(context, loadJournal);
+        },
       ),
     );
   }
